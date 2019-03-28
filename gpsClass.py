@@ -12,11 +12,10 @@ import os
 import threading
 
 class SmartAVLGPS(threading.Thread):
-	
-	CONNECTION_TIMEOUT = 20
-	
+		
 	def __init__(self):
 		threading.Thread.__init__(self)
+		self.data_semaphore = threading.BoundedSemaphore()
 		self.current_longitude = 0
 		self.current_latitude = 0
 		self.current_speed = None
@@ -25,10 +24,9 @@ class SmartAVLGPS(threading.Thread):
 		
 	def run(self):
 		connect_to_GPS_network()
-		start_time = time.monotonic()
-		while not gps.has_fix:
-			if time.monotonic() - start_time > 20:
-				raise IOError("GPS Failed To connect
+		while(True):
+			wait_for_GPS_connected()
+			get_update_from_GPS()
 		
 		
 	def connect_to_GPS_network(self):
@@ -37,13 +35,17 @@ class SmartAVLGPS(threading.Thread):
 		#Initialize Communication
 		self.gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
 		gps.send_command(b'PMTK220,1000') #1000ms update period
-		currentTime
 	
 	#Waits until the GPS is connected back to the network.
 	#Will wait indefinitely so it does not interfere with the rest
 	#Of the operation of the device.
+	#Sleeps for a second in between attempts
 	def wait_for_GPS_connected(self):
-		
+		while not gps.has_fix:
+			time.sleep(1)
+	
+	def get_update_from_GPS(self):
+		self.gps.update()
 	
 	def knots_to_kmh(knots):
 		return knots * 1.852
