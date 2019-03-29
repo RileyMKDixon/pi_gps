@@ -8,6 +8,7 @@ import time
 import board
 import busio
 import serial
+import adafruit_gps
 import os
 import threading
 
@@ -98,8 +99,8 @@ class SmartAVLGPS(threading.Thread):
 		self.current_latitude = self.gps.latitude
 		self.current_longitude = self.gps.longitude
 		self.current_speed = self.gps.speed_knots
-		self.timestamp = self.gps.timestamp
-		self.data_semaphare.release()
+		self.timestamp = self.gps.timestamp_utc
+		self.data_semaphore.release()
 	
 	
 	def get_data(self):
@@ -115,7 +116,7 @@ class SmartAVLGPS(threading.Thread):
 						copy.deepcopy(self.current_speed)]
 		else:
 			data_list = None
-		self.data_semaphare.release()
+		self.data_semaphore.release()
 		return data_list
 		
 
