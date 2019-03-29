@@ -8,6 +8,8 @@ myGPS.start()
 
 while(True):
 	time_before_sleep = time.monotonic()
+	#This wait period can be as long as we want, in fact we can just
+	#arbitrarilly call myGPS.get_data()
 	while(time.monotonic() - time_before_sleep < 1.0):
 		time.sleep(0.5) #Let the thread block instead of busy wait
 	print("---------GPS DATA-----------")
