@@ -8,8 +8,8 @@ while(True):
 	dataList = myGPS.get_data()
 	if dataList is not None:
 		current_timestamp = dataList[0]
-		current_longitude = dataList[1]
-		current_latitude = dataList[2]
+		current_latitude = dataList[1]
+		current_longitude = dataList[2]
 		current_speed = dataList[3]
 		print("Timestamp: {}/{}/{} {:02}:{:02}:{:02}".format(
 			current_timestamp.tm_day,
@@ -18,6 +18,7 @@ while(True):
 			current_timestamp.tm_hour,
 			current_timestamp.tm_min,
 			current_timestamp.tm_sec))
+		print("Latitude: 
 	else
 		print("No data to report")
 	

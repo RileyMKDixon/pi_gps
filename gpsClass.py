@@ -16,8 +16,8 @@ class SmartAVLGPS(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 		self.data_semaphore = threading.BoundedSemaphore(1)
-		self.current_longitude = None
 		self.current_latitude = None
+		self.current_longitude = None
 		self.current_speed = None
 		self.timestamp = None
 		self.gps = None
@@ -95,8 +95,8 @@ class SmartAVLGPS(threading.Thread):
 		
 	def update_data(self):
 		self.data_semaphore.acquire()
-		self.current_longitude = 0
 		self.current_latitude = 0
+		self.current_longitude = 0
 		self.current_speed = None
 		self.timestamp = None
 		self.data_semaphare.release()
@@ -106,12 +106,12 @@ class SmartAVLGPS(threading.Thread):
 		import copy
 		self.data_semaphore.acquire()
 		if (self.timestamp is not None and
-		   self.current_longitude is not None and
+		   self.current_latitude is not None and
 		   self.current_longitude is not None and
 		   self.current_speed is not None):
 			data_list = [copy.deepcopy(self.timestamp), 
-						copy.deepcopy(self.current_longitude),
 						copy.deepcopy(self.current_latitude),
+						copy.deepcopy(self.current_longitude),
 						copy.deepcopy(self.current_speed)]
 		else:
 			data_list = None
