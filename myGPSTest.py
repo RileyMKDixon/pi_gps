@@ -1,3 +1,5 @@
+#Simple script to test gpsClass and to verify that is does infact
+#run asyncronously from the main thread.
 import time
 from gpsClass import SmartAVLGPS
 
