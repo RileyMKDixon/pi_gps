@@ -95,10 +95,10 @@ class SmartAVLGPS(threading.Thread):
 		
 	def update_data(self):
 		self.data_semaphore.acquire()
-		self.current_latitude = 0
-		self.current_longitude = 0
-		self.current_speed = None
-		self.timestamp = None
+		self.current_latitude = self.gps.latitude
+		self.current_longitude = self.gps.longitude
+		self.current_speed = self.gps.speed_knots
+		self.timestamp = self.gps.timestamp
 		self.data_semaphare.release()
 	
 	
