@@ -18,7 +18,9 @@ while(True):
 			current_timestamp.tm_hour,
 			current_timestamp.tm_min,
 			current_timestamp.tm_sec))
-		print("Latitude: 
+		print("Latitude: {0:.6f}".format(current_longitude))
+		print("Longitude: {0:.6f}".format(current_longitude))
+		print("Approx Speed: {} km/h".format(current_speed*1.852))
 	else
 		print("No data to report")
 	
