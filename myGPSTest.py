@@ -3,7 +3,7 @@
 import time
 from gpsClass import SmartAVLGPS
 
-myGPS = SmartAVLGPS()
+myGPS = SmartAVLGPS(1)
 myGPS.start()
 
 while(True):
