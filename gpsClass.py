@@ -1,8 +1,9 @@
 #Much of this class is adapted from Adafruit and the example code that
 #they provide to their users for their hardware products.
 #This script relies on their CircuitPython framework that the GPS uses
-#to communicate through the GPIO pins of the Raspberry Pi.
+#to communicate through the GPIO pins or USB of the Raspberry Pi.
 #Communication is handled through the UART
+#More information can be found here: https://github.com/adafruit/Adafruit_CircuitPython_GPS
 
 import time
 import board
@@ -12,10 +13,18 @@ import adafruit_gps
 import os
 import threading
 
+
 class SmartAVLGPS(threading.Thread):
-		
-	def __init__(self):
+	
+	#set connection_type = 0 for serial connection (using GPIO pins)
+	#set connection_type = 1 for USB connection
+	#all other values will raise an error
+	#this may only be set at the creation of the object.
+	def __init__(self, connection_type):
+		if(connection_type != 0 or connection_type != 1):
+			raise ValueError("Connection Type must be 0 for Serial or 1 for USB")
 		threading.Thread.__init__(self)
+		self.connection_type = connection_type
 		self.data_semaphore = threading.BoundedSemaphore(1)
 		self.current_latitude = None
 		self.current_longitude = None
@@ -43,11 +52,17 @@ class SmartAVLGPS(threading.Thread):
 		
 		
 	def connect_to_GPS_network(self):
-		UART = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=3000)
+		if (self.connection_type == 0):
+			UART = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=3000)
+		elif (self.connection_type == 1):
+			UART = busio.UART(board.TX, board.RX, baudrate=9600, timeout=3000)
+		else:
+			raise ValueError("Connection Type must be 0 for Serial or 1 for USB")
 		self.gps = adafruit_gps.GPS(UART, debug=False)
 		#Initialize Communication
 		self.gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
 		self.gps.send_command(b'PMTK220,1000') #1000ms update period
+
 
 	
 	def knots_to_kmh(self, knots):
