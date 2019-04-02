@@ -6,8 +6,8 @@
 #More information can be found here: https://github.com/adafruit/Adafruit_CircuitPython_GPS
 
 import time
-import board
-import busio
+#import board
+#import busio
 import serial
 import adafruit_gps
 import os
@@ -55,7 +55,7 @@ class SmartAVLGPS(threading.Thread):
 		if (self.connection_type == 0):
 			UART = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=3000)
 		elif (self.connection_type == 1):
-			UART = busio.UART(board.TX, board.RX, baudrate=9600, timeout=3000)
+			UART = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=3000)
 		else:
 			raise ValueError("Connection Type must be 0 for Serial or 1 for USB")
 		self.gps = adafruit_gps.GPS(UART, debug=False)
